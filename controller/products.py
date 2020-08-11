@@ -1,18 +1,24 @@
 from config.database import get_connection
+from models.Product import Product
 
 def get_all_products():
     connection = get_connection()
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM products')
-    products = cursor.fetchall()
+    cursor.execute('SELECT id, name, description, price, id_category, id_brand, created_at, updated_at FROM products')
+    rows = cursor.fetchall()
     cursor.close()
     connection.close()
+    products = []
+    for item in rows:
+        products.append(
+            Product(item[1], item[2], item[3], item[4], item[5]).with_id(item[0]).with_timestamps(item[6], item[7])
+        )
     return products
 
 def get_product_by_id(id):
     connection = get_connection()
     cursor = connection.cursor()
-    cursor.execute('SELECT * FROM products WHERE id = %s', (id,))
+    cursor.execute('SELECT id, name, description, price, id_category, id_brand, created_at, updated_at FROM products WHERE id = %s', (id,))
     product = cursor.fetchone()
     cursor.close()
     connection.close()

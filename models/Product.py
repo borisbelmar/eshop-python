@@ -14,3 +14,15 @@ class Product:
         self.created_at = created_at
         self.updated_at = updated_at
         return self
+
+    def serialize (self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'price': self.price,
+            'id_category': self.id_category,
+            'id_brand': self.id_brand,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
