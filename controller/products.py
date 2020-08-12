@@ -1,5 +1,9 @@
 from config.database import get_connection
 from models.Product import Product
+from models.ProductSchema import ProductSchema
+
+product_schema = ProductSchema()
+products_schema = ProductSchema(many=True)
 
 def get_all_products():
     connection = get_connection()
@@ -11,9 +15,18 @@ def get_all_products():
     products = []
     for item in rows:
         products.append(
-            Product(item[1], item[2], item[3], item[4], item[5]).with_id(item[0]).with_timestamps(item[6], item[7])
+            dict(
+                id=item[0],
+                name=item[1],
+                description=item[2],
+                price=item[3],
+                id_category=item[4],
+                id_brand=item[5],
+                created_at=item[6],
+                updated_at=item[7]
+            )
         )
-    return products
+    return products_schema.dump(products)
 
 def get_product_by_id(id):
     connection = get_connection()

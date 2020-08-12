@@ -10,10 +10,7 @@ def hello_world():
 
 @app.route('/products')
 def get_products():
-    products = []
-    for product in get_all_products():
-        products.append(product.serialize())
-    return jsonify(products)
+    return jsonify(get_all_products())
 
 @app.route('/products/<int:id>', methods=['GET'])
 def get_product(id):
