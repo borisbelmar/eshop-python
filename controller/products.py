@@ -1,5 +1,4 @@
 from config.database import get_connection
-from models.Product import Product
 from models.ProductSchema import ProductSchema
 
 product_schema = ProductSchema()
@@ -32,10 +31,20 @@ def get_product_by_id(id):
     connection = get_connection()
     cursor = connection.cursor()
     cursor.execute('SELECT id, name, description, price, id_category, id_brand, created_at, updated_at FROM products WHERE id = %s', (id,))
-    product = cursor.fetchone()
+    item = cursor.fetchone()
     cursor.close()
     connection.close()
-    return product
+    product = dict(
+                id=item[0],
+                name=item[1],
+                description=item[2],
+                price=item[3],
+                id_category=item[4],
+                id_brand=item[5],
+                created_at=item[6],
+                updated_at=item[7]
+            )
+    return product_schema.dump(product)
 
 def insert_product(name, description, price, id_category, id_brand):
     try:

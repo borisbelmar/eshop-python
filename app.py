@@ -1,22 +1,16 @@
 from flask import Flask, jsonify
-from controller.products import get_product_by_id, get_all_products
+from routes.products import products_blueprint
+from routes.brands import brands_blueprint
+from routes.categories import categories_blueprint
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+app.url_map.strict_slashes = False
 
 @app.route('/')
 def hello_world():
-    return 'Holi'
+    return 'e-Shop Flask'
 
-@app.route('/products')
-def get_products():
-    return jsonify(get_all_products())
-
-@app.route('/products/<int:id>', methods=['GET'])
-def get_product(id):
-    product = get_product_by_id(id)
-    product_dict = {
-        'id': product[0],
-        'name': product[1] 
-    }
-    return jsonify(product_dict)
+app.register_blueprint(products_blueprint, url_prefix = '/products')
+app.register_blueprint(brands_blueprint, url_prefix = '/brands')
+app.register_blueprint(categories_blueprint, url_prefix = '/categories')

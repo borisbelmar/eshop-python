@@ -1,10 +1,10 @@
 from mysql.connector import connect
 
 CONFIG = {
-    'host': 'localhost',
+    'host': 'mysql',
     'user': 'root',
     'password': 'root',
-    'port': 9998,
+    'port': 3306,
     'database': 'eshop',
     'auth_plugin': 'mysql_native_password'
 }
