@@ -10,6 +10,8 @@ pylint = "*"
 mysql-connector-python = "*"
 flask = "*"
 marshmallow = "*"
+bcrypt = "*"
+pyjwt = "*"
 
 [requires]
 python_version = "3.8"

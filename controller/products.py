@@ -1,5 +1,7 @@
 from config.database import get_connection
-from models.ProductSchema import ProductSchema
+from models import ProductSchema
+from flask import abort
+import mysql.connector
 
 product_schema = ProductSchema()
 products_schema = ProductSchema(many=True)
@@ -32,6 +34,8 @@ def get_product_by_id(id):
     cursor = connection.cursor()
     cursor.execute('SELECT id, name, description, price, id_category, id_brand, created_at, updated_at FROM products WHERE id = %s', (id,))
     item = cursor.fetchone()
+    if item is None:
+        abort(404)
     cursor.close()
     connection.close()
     product = dict(
@@ -46,49 +50,61 @@ def get_product_by_id(id):
             )
     return product_schema.dump(product)
 
-def insert_product(name, description, price, id_category, id_brand):
+def insert_product(product):
     try:
         connection = get_connection()
         cursor = connection.cursor(prepared=True)
         stmt = 'INSERT INTO products (name, description, price, id_category, id_brand) VALUES (%s, %s, %s, %s, %s)'
-        cursor.execute(stmt, (name, description, price, id_category, id_brand))
+        cursor.execute(stmt, (product['name'], product['description'], product['price'], product['id_category'], product['id_brand']))
         connection.commit()
+        last_row_id = cursor.lastrowid
+        product['id'] = last_row_id
+        response = { 'message': 'INSERTED', 'record': product }, 201
         cursor.close()
         connection.close()
-        return True
+        return response
+    except KeyError as err:
+        abort(400)
+    except mysql.connector.Error as err:
+        print(f'Error: {err.msg}')
+        if err.errno == 1452 or err.errno == 1366:
+            abort(400)
+        else:
+            abort(500)
     except: 
-        cursor.close()
-        connection.close()
-        return False
+        abort(500)
 
-def delete_product(id):
+
+def remove_product(id):
     try:
         connection = get_connection()
         cursor = connection.cursor(prepared=True)
         stmt = 'DELETE FROM products WHERE id = %s'
         cursor.execute(stmt, (id,))
         connection.commit()
-        row_count = cursor.rowcount
         cursor.close()
         connection.close()
-        return row_count > 0
+        return { 'removed': id }
     except: 
-        cursor.close()
-        connection.close()
-        return False
+        abort(500)
 
-def update_product(id, name, description, price, id_category, id_brand):
+def update_product(id, product):
     try:
         connection = get_connection()
         cursor = connection.cursor(prepared=True)
         stmt = 'UPDATE products SET updated_at = CURRENT_TIMESTAMP, name = %s, description = %s, price = %s, id_category = %s, id_brand = %s WHERE id = %s'
-        cursor.execute(stmt, (name, description, price, id_category, id_brand, id))
+        cursor.execute(stmt, (
+            product['name'],
+            product['description'],
+            product['price'],
+            product['id_category'],
+            product['id_brand'],
+            id
+        ))
         connection.commit()
         row_count = cursor.rowcount
         cursor.close()
         connection.close()
-        return row_count > 0
+        return { 'rows_affected': row_count }
     except: 
-        cursor.close()
-        connection.close()
-        return False
+        abort(500)
