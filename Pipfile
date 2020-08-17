@@ -12,6 +12,7 @@ flask = "*"
 marshmallow = "*"
 bcrypt = "*"
 pyjwt = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"

@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request, abort
 from models.ProductSchema import ProductSchema
 from controller.products import get_product_by_id, get_all_products, insert_product, remove_product, update_product
 
+from middlewares import is_auth
+
 products_blueprint = Blueprint('products_blueprint', __name__)
 
 @products_blueprint.route('/', methods=['GET'])

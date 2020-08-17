@@ -14,6 +14,10 @@ def handle_403(err):
 def handle_404(err):
     return { 'message': 'NOT_FOUND' }, 404
 
+@http_errors.app_errorhandler(409)
+def handle_409(err):
+    return { 'message': 'CONFLICT' }, 409
+
 @http_errors.app_errorhandler(500)
 def handle_500(err):
     return { 'message': 'INTERNAL_SERVER_ERROR' }, 500

@@ -33,14 +33,14 @@ CREATE TABLE products (
     FOREIGN KEY (id_brand) REFERENCES brands (id)
 );
 
-
-CREATE TABLE customer (
+CREATE TABLE customers (
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     email VARCHAR(120) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     firstname VARCHAR(60) NOT NULL,
     lastname VARCHAR(60) NOT NULL,
     birth DATE NOT NULL,
+    active BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -59,4 +59,3 @@ INSERT INTO brands (name) VALUES
 INSERT INTO products (name, description, price, id_category, id_brand) VALUES
     ('Sea Salt Organic', 'Milk chocolate thins', 8000, 1, 1),
     ('Café Nariño 500g', 'Soft coffee from Colombia', 16000, 2, 2);
-

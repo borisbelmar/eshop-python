@@ -1,5 +1,3 @@
-#TODO: Actualizar get_product_by_id.
-
 from config.database import get_connection
 from models.CategorySchema import CategorySchema
 
