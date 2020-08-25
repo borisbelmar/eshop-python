@@ -1,11 +1,11 @@
-from config.database import get_connection
-from utils import generate_token
 from flask import abort
-from models import CustomerSchema
-
 import bcrypt
 import mysql.connector
 import marshmallow
+
+from app.config import get_connection
+from app.utils import generate_token
+from app.models import CustomerSchema
 
 customer_schema = CustomerSchema()
 

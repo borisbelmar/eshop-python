@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from models.CategorySchema import CategorySchema
-from controller.categories import get_category_by_id, get_all_categories, insert_category, delete_category, update_category
+from app.models import CategorySchema
+from app.controller import get_category_by_id, get_all_categories, insert_category, delete_category, update_category
 
 categories_blueprint = Blueprint('categories_blueprint', __name__)
 

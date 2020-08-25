@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import request, abort, Response, jsonify
-from utils import validate_token
+
+from app.utils import validate_token
 
 def is_auth(f):
     @wraps(f)

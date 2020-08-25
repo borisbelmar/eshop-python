@@ -1,8 +1,6 @@
 from flask import Blueprint, jsonify, request, abort
-from models.ProductSchema import ProductSchema
-from controller.products import get_product_by_id, get_all_products, insert_product, remove_product, update_product
-
-from middlewares import is_auth
+from app.models import ProductSchema
+from app.controller import get_product_by_id, get_all_products, insert_product, remove_product, update_product
 
 products_blueprint = Blueprint('products_blueprint', __name__)
 

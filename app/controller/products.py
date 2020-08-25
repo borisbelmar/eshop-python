@@ -1,5 +1,5 @@
-from config.database import get_connection
-from models import ProductSchema
+from app.config import get_connection
+from app.models import ProductSchema
 from flask import abort
 import mysql.connector
 
@@ -64,14 +64,20 @@ def insert_product(product):
         connection.close()
         return response
     except KeyError as err:
+        cursor.close()
+        connection.close()
         abort(400)
     except mysql.connector.Error as err:
+        cursor.close()
+        connection.close()
         print(f'Error: {err.msg}')
         if err.errno == 1452 or err.errno == 1366:
             abort(400)
         else:
             abort(500)
-    except: 
+    except:
+        cursor.close()
+        connection.close()
         abort(500)
 
 
@@ -86,6 +92,8 @@ def remove_product(id):
         connection.close()
         return { 'removed': id }
     except: 
+        cursor.close()
+        connection.close()
         abort(500)
 
 def update_product(id, product):
@@ -106,5 +114,15 @@ def update_product(id, product):
         cursor.close()
         connection.close()
         return { 'rows_affected': row_count }
-    except: 
+    except mysql.connector.Error as err:
+        cursor.close()
+        connection.close()
+        print(f'Error: {err.msg}')
+        if err.errno == 1452 or err.errno == 1366:
+            abort(400)
+        else:
+            abort(500)
+    except:
+        cursor.close()
+        connection.close()
         abort(500)

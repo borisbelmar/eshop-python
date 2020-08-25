@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
-from models.BrandSchema import BrandSchema
-from controller.brands import get_brand_by_id, get_all_brands, insert_brand, delete_brand, update_brand
+from app.models import BrandSchema
+from app.controller import get_brand_by_id, get_all_brands, insert_brand, delete_brand, update_brand
 
 brands_blueprint = Blueprint('brands_blueprint', __name__)
 

@@ -1,7 +1,7 @@
 from flask import Blueprint, request, abort
-from models import ProductSchema
-from controller.customers import customer_register, customer_login, customer_info
-from middlewares import is_auth
+from app.models import ProductSchema
+from app.controller import customer_register, customer_login, customer_info
+from app.middlewares import is_auth
 
 customers_blueprint = Blueprint('customers_blueprint', __name__)
 
@@ -13,8 +13,8 @@ def customer_insert():
 @customers_blueprint.route('/login', methods=['POST'])
 def customer_login_route():
     body = request.get_json()
-    if body is None or body['email'] is None or body['password'] is None:
-        abort(400)
+    if body is None or body.get('email') is None or body.get('password') is None:
+        abort(400, 'MISSING_EMAIL_OR_PASSWORD')
     return customer_login(body['email'], body['password'])
 
 @customers_blueprint.route('/account', methods=['GET'])
